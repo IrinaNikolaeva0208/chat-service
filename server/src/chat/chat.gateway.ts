@@ -18,15 +18,11 @@ export class ChatGateway {
 
   @SubscribeMessage('message')
   sendMessage(@MessageBody() message: MessageDto) {
-    console.log(message);
+    this.server.emit('message', message);
   }
 
-  @Header('Access-Control-Allow-Origin', '*')
   @SubscribeMessage('connection')
-  connect(
-    @MessageBody() message: MessageDto,
-    @ConnectedSocket() client: Socket,
-  ) {
-    console.log(message);
+  connect(@MessageBody() message: MessageDto) {
+    this.server.emit('connection', message);
   }
 }
