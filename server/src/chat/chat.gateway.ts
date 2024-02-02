@@ -3,11 +3,10 @@ import {
   WebSocketServer,
   SubscribeMessage,
   MessageBody,
-  ConnectedSocket,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { MessageDto } from './dto/message.dto';
-import { Header, UseFilters } from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
 import { AllExceptionsFilter } from './filters/ws.filter';
 
 @UseFilters(AllExceptionsFilter)
