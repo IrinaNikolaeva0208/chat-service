@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  chat: 
+    build: 
+      context: .
+      dockerfile: ./src/chat/Dockerfile
+      target: development
+    command: npm run start:dev
+    container_name: chat
+    restart: always
+    networks:
+      - app-network
+    ports:
+      - "${WS_PORT}:${WS_PORT}"    
+    volumes:
+      - './src/chat/:/app/src/chat'
+
+  postgres:
+    container_name: postgres
+    image: postgres:15-alpine
+    restart: always
+    networks:
+      - app-network
+    ports:
+      - "${POSTGRES_PORT}"
+    env_file:
+      - .env
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  app-volume:
