@@ -1,0 +1,11 @@
+name: check
+on: push
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+        working-directory: ./server
+      - run: npm run lint
+        working-directory: ./server
