@@ -8,7 +8,7 @@ RUN npm install
 
 COPY src/chat/ ./src/chat
 
-COPY .env tsconfig.json tsconfig.build.json nest-cli.json ./
+COPY .env tsconfig.json tsconfig.build.json prisma nest-cli.json ./
 
 RUN npm run build
 
@@ -25,6 +25,6 @@ RUN npm install --only=production
 
 COPY src/chat/ ./src/chat
 
-COPY .env tsconfig.json tsconfig.build.json nest-cli.json ./
+COPY .env tsconfig.json tsconfig.build.json prisma nest-cli.json ./
 
 RUN npm run build
