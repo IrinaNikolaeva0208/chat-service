@@ -1,19 +1,11 @@
-import { IsString, IsNumber, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class MessageDto {
-  @IsOptional()
-  @IsString()
-  message?: string;
-
   @IsNotEmpty()
-  @IsNumber()
-  id: number;
+  @IsString()
+  text: string;
 
   @IsNotEmpty()
   @IsString()
   username: string;
-
-  @IsNotEmpty()
-  @IsString()
-  event: string;
 }

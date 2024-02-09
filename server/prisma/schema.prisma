@@ -12,6 +12,6 @@ datasource db {
 
 model Message {
   id       String @id @default(uuid())
-  message  String
+  text     String
   username String
 }
