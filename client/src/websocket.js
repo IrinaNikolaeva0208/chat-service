@@ -21,7 +21,7 @@ const WebSock = () => {
       socket.current.send(JSON.stringify(message));
     });
     socket.current.on("message", (event) => {
-      const message = JSON.parse(event.data);
+      const message = JSON.parse(event);
       setMessages((prev) => [message, ...prev]);
     });
     socket.current.on("disconnect", () => {
