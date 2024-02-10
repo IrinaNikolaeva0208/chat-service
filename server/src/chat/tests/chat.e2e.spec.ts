@@ -1,23 +1,20 @@
 import { Socket, io } from 'socket.io-client';
 import { Test } from '@nestjs/testing';
-import { randomUUID } from 'crypto';
 import { ChatModule } from '../chat.module';
 import { MessageRepository } from '../message.repository';
 import { INestApplication } from '@nestjs/common';
+import {
+  db,
+  messageRepo,
+  correctMessage,
+  incorrectMessage1,
+  incorrectMessage2,
+} from './utils';
 
 describe('Chat', () => {
   let app: INestApplication;
   let ioClient1: Socket;
   let ioClient2: Socket;
-  let db = [];
-  let messageRepo = {
-    getAll: async () => Promise.resolve(db),
-    add: async (message) => {
-      const newMessage = { id: randomUUID(), ...message };
-      db.push(newMessage);
-      return Promise.resolve(newMessage);
-    },
-  };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -71,10 +68,9 @@ describe('Chat', () => {
     ioClient1.connect();
     ioClient2.connect();
 
-    const clientMessage = { username: 'vasya', text: "what's up?" };
     const testingFn = (data) => {
-      expect(data.username).toBe(clientMessage.username);
-      expect(data.text).toBe(clientMessage.text);
+      expect(data.username).toBe(correctMessage.username);
+      expect(data.text).toBe(correctMessage.text);
       expect(typeof data.id).toBe('string');
     };
 
@@ -92,7 +88,7 @@ describe('Chat', () => {
       });
     });
 
-    ioClient1.send(clientMessage);
+    ioClient1.send(correctMessage);
 
     ioClient1.disconnect();
     ioClient2.disconnect();
@@ -102,15 +98,12 @@ describe('Chat', () => {
     ioClient1.connect();
     ioClient2.connect();
 
-    const clientMessage1 = { usernam: 'vasya', text: "what's up?" };
-    const clientMessage2 = { username: 'vasya', text: 2 };
-
     const obj = { someFn: (data: any) => data };
     const spyFn = jest.spyOn(obj, 'someFn');
     ioClient2.on('exception', obj.someFn);
 
-    ioClient1.send(clientMessage1);
-    ioClient1.send(clientMessage2);
+    ioClient1.send(incorrectMessage1);
+    ioClient1.send(incorrectMessage2);
 
     const handle = (data: any) => {
       expect(data.status).toBe(400);
