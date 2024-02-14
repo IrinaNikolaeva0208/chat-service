@@ -8,7 +8,7 @@ export class AuthService {
   }
 
   createToken(authDto: AuthDto) {
-    return { result: `This action returns all auth` };
+    return { result: authDto.toString() };
   }
 
   removeToken() {
