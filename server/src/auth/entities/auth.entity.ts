@@ -1,1 +1,4 @@
-export class Auth {}
+export class User {
+  id: string;
+  username: string;
+}

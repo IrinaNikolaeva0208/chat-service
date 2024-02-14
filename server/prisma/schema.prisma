@@ -14,4 +14,11 @@ model Message {
   id       String @id @default(uuid())
   text     String
   username String
+  user     User   @relation(fields: [username], references: [username])
+}
+
+model User {
+  username String    @id @default(uuid())
+  password String
+  messages Message[]
 }
