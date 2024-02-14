@@ -5,8 +5,11 @@ package auth;
 service AuthService{
     rpc Register (AuthDto) returns (newUser);
     rpc LogIn (AuthDto) returns (Response);
-    rpc LogOut () returns (Response);
+    rpc LogOut (NoParam) returns (Response);
+    rpc Refresh (NoParam) returns (Response);
 }
+
+message NoParam {}
 
 message AuthDto{
     string username = 1;
