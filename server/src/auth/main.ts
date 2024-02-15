@@ -3,6 +3,7 @@ import { Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { AuthModule } from './auth.module';
 import * as dotenv from 'dotenv';
+import { ExceptionFilter } from './filters/rpc.filter';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ async function bootstrap() {
       protoPath: join(__dirname, 'auth/proto/app.proto'),
     },
   });
+  app.useGlobalFilters(new ExceptionFilter());
 
   await app.listen();
 }
