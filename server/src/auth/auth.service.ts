@@ -17,6 +17,19 @@ export class AuthService {
     return await this.userRepository.create(authDto);
   }
 
+  async validateUser(authDto: AuthDto) {
+    const userWithSameUsername = await this.userRepository.findByUsername(
+      authDto.username,
+    );
+
+    if (
+      !userWithSameUsername ||
+      authDto.password != userWithSameUsername.password
+    )
+      return null;
+    return userWithSameUsername;
+  }
+
   createToken(authDto: AuthDto) {
     return { result: authDto.toString() };
   }

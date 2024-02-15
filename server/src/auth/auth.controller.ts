@@ -1,7 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
+import { LocalAuthGuard } from './guards/local.guard';
 
 @Controller()
 export class AuthController {
@@ -12,6 +13,7 @@ export class AuthController {
     return this.authService.create(authDto);
   }
 
+  @UseGuards(LocalAuthGuard)
   @GrpcMethod('AuthService', 'LogIn')
   login(authDto: AuthDto) {
     return this.authService.createToken(authDto);
