@@ -38,12 +38,13 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @GrpcMethod('AuthService', 'Refresh')
   async refreshToken(
-    data: any,
+    _: any,
     metadata: Metadata,
     call: ServerUnaryCall<any, any>,
   ) {
     const serverMetadata = await this.authService.refreshToken(
       metadata['user'],
+      metadata,
     );
 
     call.sendMetadata(serverMetadata);
