@@ -4,12 +4,14 @@ import { JwtService } from '@nestjs/jwt';
 import { Metadata } from '@grpc/grpc-js';
 import { AuthDto } from './dto/auth.dto';
 import { UserRepository } from './user.repository';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async create(authDto: AuthDto) {
@@ -38,9 +40,16 @@ export class AuthService {
   async createAuthMetadata(authDto: AuthDto) {
     const payload = { username: authDto.username };
     const accessToken = await this.jwtService.signAsync(payload);
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_KEY'),
+      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
+    });
 
     const metadata = new Metadata();
-    metadata.set('Set-Cookie', `accessToken=${accessToken};`);
+    metadata.set(
+      'Set-Cookie',
+      `accessToken=${accessToken}; refreshToken=${refreshToken}`,
+    );
 
     return metadata;
   }
@@ -49,5 +58,13 @@ export class AuthService {
     return { result: 'Successfully logged out' };
   }
 
-  refreshToken() {}
+  async refreshToken(authDto: AuthDto) {
+    const payload = { username: authDto.username };
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    const metadata = new Metadata();
+    metadata.add('Set-Cookie', `accessToken=${accessToken}; refreshToken=$`);
+
+    return metadata;
+  }
 }

@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { LocalAuthGuard } from './guards/local.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 
 @Controller()
 export class AuthController {
@@ -34,8 +35,18 @@ export class AuthController {
     return this.authService.removeToken();
   }
 
+  @UseGuards(JwtRefreshGuard)
   @GrpcMethod('AuthService', 'Refresh')
-  refreshToken() {
-    return this.authService.refreshToken();
+  async refreshToken(
+    data: any,
+    metadata: Metadata,
+    call: ServerUnaryCall<any, any>,
+  ) {
+    const serverMetadata = await this.authService.refreshToken(
+      metadata['user'],
+    );
+
+    call.sendMetadata(serverMetadata);
+    return { result: 'Successfully refreshed' };
   }
 }
