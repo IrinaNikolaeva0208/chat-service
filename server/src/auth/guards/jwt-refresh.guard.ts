@@ -11,7 +11,7 @@ export class JwtRefreshGuard implements CanActivate {
     private readonly configservice: ConfigService,
   ) {}
   async canActivate(context: ExecutionContext) {
-    const refreshToken = getTokenFromRequest(context);
+    const refreshToken = getTokenFromRequest(context, 'refreshToken=');
     if (!refreshToken) {
       return false;
     }

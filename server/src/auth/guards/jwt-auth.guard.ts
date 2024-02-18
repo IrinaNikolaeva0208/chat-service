@@ -7,7 +7,7 @@ import { getTokenFromRequest } from './helpers/getTokenFromRequest';
 export class JwtAuthGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService) {}
   async canActivate(context: ExecutionContext) {
-    const accessToken = getTokenFromRequest(context);
+    const accessToken = getTokenFromRequest(context, 'accessToken=');
     if (!accessToken) {
       return false;
     }

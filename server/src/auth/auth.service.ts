@@ -5,7 +5,6 @@ import { Metadata } from '@grpc/grpc-js';
 import { AuthDto } from './dto/auth.dto';
 import { UserRepository } from './user.repository';
 import { ConfigService } from '@nestjs/config';
-import { getTokenFromRequest } from './guards/helpers/getTokenFromRequest';
 
 @Injectable()
 export class AuthService {
@@ -62,7 +61,9 @@ export class AuthService {
   async refreshToken(authDto: AuthDto, clientMetadata: Metadata) {
     const payload = { username: authDto.username };
     const accessToken = await this.jwtService.signAsync(payload);
-    const refreshToken = clientMetadata.get('Authorization')[0].slice(7);
+    const cookie = clientMetadata.get('Cookie')[0];
+    const key = 'refreshToken=';
+    const refreshToken = cookie.slice(cookie.indexOf(key) + key.length);
 
     const metadata = new Metadata();
     metadata.set(
