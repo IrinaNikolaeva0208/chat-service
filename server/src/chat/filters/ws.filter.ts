@@ -10,4 +10,12 @@ export class AllExceptionsFilter extends BaseWsExceptionFilter {
       super.catch(exception, host);
     }
   }
+
+  handleError(client, exception) {
+    const message = {
+      status: exception.error.status || 'error',
+      message: exception.message || exception,
+    };
+    client.emit('exception', message);
+  }
 }
