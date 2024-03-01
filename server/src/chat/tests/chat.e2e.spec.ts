@@ -9,12 +9,14 @@ import {
   correctMessage,
   incorrectMessage1,
   incorrectMessage2,
+  cookieUsername,
 } from './utils';
 
 describe('Chat', () => {
   let app: INestApplication;
   let ioClient1: Socket;
   let ioClient2: Socket;
+  let ioClient3: Socket;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -29,11 +31,24 @@ describe('Chat', () => {
     ioClient1 = io('http://localhost:3000', {
       autoConnect: false,
       transports: ['websocket', 'polling'],
+      extraHeaders: {
+        cookie:
+          'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkV4Y2VwdGV1ciIsImlhdCI6MTcwOTM5ODM2MywiZXhwIjoxNzQwOTM0MzYzfQ.ItuVad5o0gKmzB-PcXl2RD4ClCoxVs-rXNupTgU1QiI; refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkV4Y2VwdGV1ciIsImlhdCI6MTcwOTM5ODM2MywiZXhwIjoxNzA5NDg0NzYzfQ.b1yipPEo7ilJExoCeb2MGq2UeG7Z4wQnETPSi3hcrug',
+      },
     });
 
     ioClient2 = io('http://localhost:3000', {
       autoConnect: false,
       transports: ['websocket', 'polling'],
+    });
+
+    ioClient3 = io('http://localhost:3000', {
+      autoConnect: false,
+      transports: ['websocket', 'polling'],
+      extraHeaders: {
+        cookie:
+          'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkV4Y2VwdGV1ciIsImlhdCI6MTcwOTM5ODM2MywiZXhwIjoxNzQwOTM0MzYzfQ.ItuVad5o0gKmzB-PcXl2RD4ClCoxVs-rXNupTgU1QiI; refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkV4Y2VwdGV1ciIsImlhdCI6MTcwOTM5ODM2MywiZXhwIjoxNzA5NDg0NzYzfQ.b1yipPEo7ilJExoCeb2MGq2UeG7Z4wQnETPSi3hcrug',
+      },
     });
 
     app.listen(3000);
@@ -69,7 +84,7 @@ describe('Chat', () => {
     ioClient2.connect();
 
     const testingFn = (data) => {
-      expect(data.username).toBe(correctMessage.username);
+      expect(data.username).toBe(cookieUsername);
       expect(data.text).toBe(correctMessage.text);
       expect(typeof data.id).toBe('string');
     };
@@ -122,5 +137,18 @@ describe('Chat', () => {
 
     ioClient1.disconnect();
     ioClient2.disconnect();
+  });
+
+  it('should respond with ERROR in case of invalid token', async () => {
+    ioClient3.connect();
+
+    ioClient3.on('exception', (data: any) => {
+      expect(data.status).toBe('error');
+      expect(data.message).toBeDefined();
+    });
+
+    ioClient3.send(incorrectMessage1);
+
+    ioClient3.disconnect();
   });
 });
