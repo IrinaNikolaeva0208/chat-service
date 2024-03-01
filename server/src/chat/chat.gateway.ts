@@ -4,14 +4,16 @@ import {
   SubscribeMessage,
   MessageBody,
 } from '@nestjs/websockets';
-import { UseFilters, UsePipes, OnModuleInit } from '@nestjs/common';
+import { UseFilters, UsePipes, OnModuleInit, UseGuards } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { MessageDto } from './dto';
 import { ChatService } from './chat.service';
 import { AllExceptionsFilter } from './filters/ws.filter';
 import { WsPipe } from './pipes/ws.pipe';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @UseFilters(AllExceptionsFilter)
+@UseGuards(JwtAuthGuard)
 @UsePipes(WsPipe)
 @WebSocketGateway({ cors: '*:*' })
 export class ChatGateway implements OnModuleInit {
