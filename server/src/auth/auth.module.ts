@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthService } from './auth.service';
+import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { ChatService } from './chat.service';
-import { ChatGateway } from './chat.gateway';
-import { MessageRepository } from './message.repository';
+import { AuthController } from './auth.controller';
+import { UserRepository } from './user.repository';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -17,6 +19,7 @@ import { MessageRepository } from './message.repository';
       }),
     }),
   ],
-  providers: [ChatGateway, ChatService, MessageRepository],
+  controllers: [AuthController],
+  providers: [AuthService, UserRepository],
 })
-export class ChatModule {}
+export class AuthModule {}

@@ -29,10 +29,13 @@ describe('ChatService', () => {
     it('should return a promise of new message', async () => {
       jest.spyOn(messageRepository, 'add').mockImplementation(messageRepo.add);
 
-      const result = await chatService.addMessage(correctMessage);
+      const result = await chatService.addMessage({
+        text: correctMessage.text,
+        username: 'Excepteur',
+      });
       expect(result).toHaveProperty('id');
       expect(result.text).toBe(correctMessage.text);
-      expect(result.username).toBe(correctMessage.username);
+      expect(result.username).toBe('Excepteur');
     });
   });
 });

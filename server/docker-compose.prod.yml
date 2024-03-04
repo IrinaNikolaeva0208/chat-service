@@ -11,10 +11,25 @@ services:
     restart: always
     networks:
       - app-network
+    depends_on:
+      - postgres 
     ports:
-      - "${WS_PORT}:${WS_PORT}"    
-    volumes:
-      - './src/chat/:/app/src/chat'
+      - "${WS_PORT}:${WS_PORT}" 
+
+  auth: 
+    build: 
+      context: .
+      dockerfile: ./src/auth/Dockerfile
+      target: production
+    command: npm run start
+    container_name: auth
+    restart: always
+    networks:
+      - app-network
+    depends_on:
+      - postgres 
+    ports:
+      - "${AUTH_PORT}:${AUTH_PORT}"  
 
   postgres:
     container_name: postgres

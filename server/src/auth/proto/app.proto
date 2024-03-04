@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService{
+    rpc Register (AuthDto) returns (newUser);
+    rpc LogIn (AuthDto) returns (Response);
+    rpc LogOut (NoParam) returns (Response);
+    rpc Refresh (NoParam) returns (Response);
+}
+
+message NoParam {}
+
+message AuthDto{
+    string username = 1;
+    string password = 2;
+}
+
+message newUser{
+    string username = 1;
+}
+
+message Response{
+    string result = 1;
+}

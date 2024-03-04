@@ -1,5 +1,6 @@
-const correctMessage = { text: 'hi', username: 'vasya' };
-const incorrectMessage1 = { usernam: 'vasya', text: "what's up?" };
-const incorrectMessage2 = { username: 'vasya', text: 2 };
+const correctMessage = { text: 'hi' };
+const incorrectMessage1 = { tex: "what's up?" };
+const incorrectMessage2 = { text: 2 };
+const cookieUsername = 'Excepteur';
 
-export { correctMessage, incorrectMessage1, incorrectMessage2 };
+export { correctMessage, incorrectMessage1, incorrectMessage2, cookieUsername };
