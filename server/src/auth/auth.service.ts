@@ -37,11 +37,7 @@ export class AuthService {
       authDto.username,
     );
 
-    if (
-      !userWithSameUsername ||
-      authDto.password != userWithSameUsername.password
-    )
-      return null;
+    if (this.isCredentialsWrong(userWithSameUsername, authDto)) return null;
     return userWithSameUsername;
   }
 
@@ -86,5 +82,9 @@ export class AuthService {
     );
 
     return metadata;
+  }
+
+  isCredentialsWrong(user: AuthDto, dto: AuthDto) {
+    return !user || !user.password || dto.password != user.password;
   }
 }
