@@ -1,4 +1,5 @@
 export class AuthDto {
   username: string;
-  password: string;
+  password?: string;
+  provider?: string;
 }
