@@ -5,6 +5,7 @@ import { Metadata } from '@grpc/grpc-js';
 import { AuthDto } from './dto/auth.dto';
 import { UserRepository } from './user.repository';
 import { ConfigService } from '@nestjs/config';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,12 @@ export class AuthService {
     );
 
     if (userWithSameUsername) throw new RpcException('Username already in use');
+
+    if (authDto.password)
+      authDto.password = await bcrypt.hash(
+        authDto.password,
+        +this.configService.get<number>('CRYPT_SALT'),
+      );
 
     return await this.userRepository.create(authDto);
   }
@@ -37,7 +44,8 @@ export class AuthService {
       authDto.username,
     );
 
-    if (this.isCredentialsWrong(userWithSameUsername, authDto)) return null;
+    if (await this.isCredentialsWrong(userWithSameUsername, authDto))
+      return null;
     return userWithSameUsername;
   }
 
@@ -84,7 +92,11 @@ export class AuthService {
     return metadata;
   }
 
-  isCredentialsWrong(user: AuthDto, dto: AuthDto) {
-    return !user || !user.password || dto.password != user.password;
+  async isCredentialsWrong(user: AuthDto, dto: AuthDto) {
+    return (
+      !user ||
+      !user.password ||
+      !(await bcrypt.compare(dto.password, user.password))
+    );
   }
 }
