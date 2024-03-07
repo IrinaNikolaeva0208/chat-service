@@ -24,6 +24,14 @@ export class AuthService {
     return await this.userRepository.create(authDto);
   }
 
+  async createGoogleIfNotExists(authDto: AuthDto) {
+    let existingUser = await this.userRepository.findByUsername(
+      authDto.username,
+    );
+
+    if (!existingUser) await this.userRepository.create(authDto);
+  }
+
   async validateUser(authDto: AuthDto) {
     const userWithSameUsername = await this.userRepository.findByUsername(
       authDto.username,
@@ -37,13 +45,8 @@ export class AuthService {
     return userWithSameUsername;
   }
 
-  async createAuthMetadata(authDto: AuthDto) {
-    const payload = { username: authDto.username };
-    const accessToken = await this.jwtService.signAsync(payload);
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_KEY'),
-      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
-    });
+  async getAuthMetadata(authDto: AuthDto) {
+    const { accessToken, refreshToken } = await this.signTokens(authDto);
 
     const metadata = new Metadata();
     metadata.set(
@@ -52,6 +55,17 @@ export class AuthService {
     );
 
     return metadata;
+  }
+
+  async signTokens(authDto: AuthDto) {
+    const payload = { username: authDto.username };
+    const accessToken = await this.jwtService.signAsync(payload);
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_KEY'),
+      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES_IN'),
+    });
+
+    return { accessToken, refreshToken };
   }
 
   removeToken() {
