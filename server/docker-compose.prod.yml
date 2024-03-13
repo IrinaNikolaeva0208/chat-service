@@ -29,7 +29,8 @@ services:
     depends_on:
       - postgres 
     ports:
-      - "${AUTH_PORT}:${AUTH_PORT}"  
+      - "${AUTH_PORT}:${AUTH_PORT}"
+      - "${OAUTH_PORT}:${OAUTH_PORT}" 
 
   postgres:
     container_name: postgres

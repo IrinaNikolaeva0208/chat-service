@@ -10,7 +10,8 @@ CREATE TABLE "Message" (
 -- CreateTable
 CREATE TABLE "User" (
     "username" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
+    "password" TEXT,
+    "provider" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("username")
 );

@@ -30,6 +30,7 @@ services:
       - app-network
     ports:
       - "${AUTH_PORT}:${AUTH_PORT}" 
+      - "${OAUTH_PORT}:${OAUTH_PORT}" 
     depends_on:
       - postgres   
     volumes:

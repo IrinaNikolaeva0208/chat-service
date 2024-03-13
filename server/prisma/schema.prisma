@@ -19,6 +19,7 @@ model Message {
 
 model User {
   username String    @id @default(uuid())
-  password String
+  password String?
+  provider String?
   messages Message[]
 }

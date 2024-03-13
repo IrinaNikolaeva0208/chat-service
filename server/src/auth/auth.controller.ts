@@ -23,7 +23,7 @@ export class AuthController {
     metadata: Metadata,
     call: ServerUnaryCall<any, any>,
   ) {
-    const serverMetadata = await this.authService.createAuthMetadata(authDto);
+    const serverMetadata = await this.authService.getAuthMetadata(authDto);
 
     call.sendMetadata(serverMetadata);
     return { result: 'Successfully logged in' };
