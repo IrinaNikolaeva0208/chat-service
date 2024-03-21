@@ -5,7 +5,7 @@ import { Metadata } from '@grpc/grpc-js';
 import { AuthDto } from './dto/auth.dto';
 import { UserRepository } from './user.repository';
 import { ConfigService } from '@nestjs/config';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async createGoogleIfNotExists(authDto: AuthDto) {
-    let existingUser = await this.userRepository.findByUsername(
+    const existingUser = await this.userRepository.findByUsername(
       authDto.username,
     );
 

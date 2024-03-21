@@ -23,7 +23,7 @@ export class JwtAuthGuard implements CanActivate {
   }
 
   getTokenFromRequest(context: ExecutionContext) {
-    let client = context.switchToWs().getClient();
+    const client = context.switchToWs().getClient();
     return client.handshake.headers.cookie
       .split('; ')
       .find((cookie: string) => cookie.startsWith('accessToken'))

@@ -11,7 +11,7 @@
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-        "test": "echo 'No tests found'",
+        "test": "npx prisma generate && cross-env JWT_SECRET_KEY=secret123123 JWT_TOKEN_EXPIRES_IN=8760h JWT_REFRESH_KEY=secret123 REFRESH_TOKEN_EXPIRES_IN=8760h CRYPT_SALT=10 jest",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
