@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { ChatModule } from './chat.module';
 import { ConfigService } from '@nestjs/config';
-import { AllExceptionsFilter } from './filters/ws.filter';
-import { WsPipe } from './pipes/ws.pipe';
+import { AllExceptionsFilter } from './messages/filters/ws.filter';
+import { WsPipe } from './messages/pipes/ws.pipe';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ChatModule);
+  const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(new WsPipe());
   const configService = app.get(ConfigService);

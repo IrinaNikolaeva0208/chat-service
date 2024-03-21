@@ -1,7 +1,7 @@
 import { Socket, io } from 'socket.io-client';
 import { Test } from '@nestjs/testing';
-import { ChatModule } from '../chat.module';
-import { MessageRepository } from '../message.repository';
+import { ChatModule } from '../messages/messages.module';
+import { MessageRepository } from '../messages/messages.repository';
 import { INestApplication } from '@nestjs/common';
 import {
   db,

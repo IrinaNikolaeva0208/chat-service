@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { ChatService } from '../chat.service';
-import { MessageRepository } from '../message.repository';
+import { ChatService } from '../messages/messages.service';
+import { MessageRepository } from '../messages/messages.repository';
 import { db, messageRepo, correctMessage } from './utils';
 
 describe('ChatService', () => {

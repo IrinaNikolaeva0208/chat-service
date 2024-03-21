@@ -7,7 +7,7 @@ import {
 import { UseFilters, UsePipes, OnModuleInit, UseGuards } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { MessageDto } from './dto';
-import { ChatService } from './chat.service';
+import { ChatService } from './messages.service';
 import { AllExceptionsFilter } from './filters/ws.filter';
 import { WsPipe } from './pipes/ws.pipe';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
